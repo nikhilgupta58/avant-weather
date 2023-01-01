@@ -1,5 +1,6 @@
 import axios from "axios";
 import React from "react";
+import usePython from "./usePython";
 
 const getDate = () => {
   const x = new Date().toLocaleDateString("en-In", {
@@ -13,6 +14,11 @@ const getDate = () => {
 
 export default function useNasa() {
   const [data, setData] = React.useState(null);
+  const {
+    mutate: pythonMutate,
+    isLoading: pythonLoading,
+    data: pythonData,
+  } = usePython();
   const [isLoading, setIsLoading] = React.useState(false);
   async function mutate({ lat, lon }) {
     setIsLoading(true);
@@ -20,8 +26,9 @@ export default function useNasa() {
     `;
     return axios.get(endpoint).then(({ data }) => {
       setIsLoading(false);
-      setData(data);
+      pythonMutate(data);
     });
   }
-  return { mutate, isLoading, data };
+
+  return { mutate, isLoading: pythonLoading || isLoading, data: pythonData };
 }
