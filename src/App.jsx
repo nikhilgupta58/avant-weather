@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import "./App.css";
+import useNasa from "./hooks/useNasa";
 import usePlaces from "./hooks/usePlaces";
 
 function App() {
   const [value, setValue] = React.useState("");
   const { mutate, isLoading, data } = usePlaces();
+  const { mutate: nasaMutate, isLoading: nasaLoading } = useNasa();
   const handleClick = () => {
     if (value) mutate(value);
   };
@@ -16,6 +18,7 @@ function App() {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        gap: "100px",
       }}
     >
       <div
@@ -49,6 +52,31 @@ function App() {
           {isLoading ? "Loading..." : "Search"}
         </button>
       </div>
+      {nasaLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            gap: "24px",
+          }}
+        >
+          {data?.list.map((row, id) => (
+            <div
+              key={id}
+              onClick={() =>
+                nasaMutate({ lat: row?.coord?.lat, lon: row?.coord?.lon })
+              }
+              style={{ cursor: "pointer" }}
+            >
+              {row?.name}, {row?.sys?.country} - lat - {row?.coord?.lat} / lon -{" "}
+              {row?.coord?.lon}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
