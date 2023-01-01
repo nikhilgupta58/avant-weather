@@ -8,7 +8,7 @@ export default function usePython() {
     console.log(data);
     setIsLoading(true);
     const endpoint = "http://127.0.0.1:5000";
-    return axios.post(endpoint, data).then(({ data }) => {
+    return axios.post(endpoint, { data: data }).then(({ data }) => {
       setIsLoading(false);
       setData(data);
     });
