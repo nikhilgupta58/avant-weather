@@ -16,7 +16,7 @@ export default function useNasa() {
   const [isLoading, setIsLoading] = React.useState(false);
   async function mutate({ lat, lon }) {
     setIsLoading(true);
-    const endpoint = `https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M,PS,WS10M&community=AG&longitude=${lon}&latitude=${lat}&start=19820101&end=${getDate()}&format=CSV
+    const endpoint = `https://power.larc.nasa.gov/api/temporal/daily/point?parameters=PRECTOTCORR,T2M,T2MDEW,T2MWET,TS,T2M_MAX,T2M_MIN,QV2M,RH2M,PS,WS10M,WS10M_MAX,WS10M_MIN,WD10M,WS50M,WS50M_MAX,WS50M_MIN,WD50M&community=AG&longitude=${lon}&latitude=${lat}&start=19820101&end=${getDate()}&format=CSV
     `;
     return axios.get(endpoint).then(({ data }) => {
       setIsLoading(false);
